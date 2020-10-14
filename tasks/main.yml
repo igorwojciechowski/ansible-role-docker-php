@@ -1,0 +1,68 @@
+- name: Include vars
+  include_vars:
+    file: vars/main.yml
+    name: php
+
+- name: Create docker_php directory
+  file:
+    path: "{{ user_home }}/docker/docker_php"
+    owner: "{{ user_name }}"
+    group: docker
+    mode: 0550
+    state: directory
+
+- name: Copy Dockerfile
+  template:
+    src: ./Dockerfile.j2
+    dest: "{{ user_home }}/docker/docker_php/Dockerfile"
+    owner: "{{ user_name }}"
+    group: docker
+    mode: 0550
+
+- name: Create supervisord directory
+  file:
+    path: "{{ user_home }}/docker/docker_php/etc/supervisor/conf.d/"
+    owner: "{{ user_name }}"
+    group: docker
+    mode: 0550
+    state: directory
+
+- name: Copy supervisord.conf
+  copy:
+    src: ./etc/supervisor/conf.d/supervisord.conf
+    dest: "{{ user_home }}/docker/docker_php/etc/supervisor/conf.d/supervisord.conf"
+    owner: "{{ user_name }}"
+    group: docker
+    mode: 0550
+
+- name: Create php directory
+  file:
+    path: "{{ user_home }}/docker/docker_php/usr/local/etc/php/"
+    owner: "{{ user_name }}"
+    group: docker
+    mode: 0550
+    state: directory
+
+- name: Copy php.ini
+  copy:
+    src: ./usr/local/etc/php/php.ini
+    dest: "{{ user_home }}/docker/docker_php/usr/local/etc/php/php.ini"
+    owner: "{{ user_name }}"
+    group: docker
+    mode: 0550
+
+- name: Create sites-enabled directory
+  file:
+    path: "{{ user_home }}/docker/docker_php/etc/nginx/sites-enabled"
+    owner: "{{ user_name }}"
+    group: docker
+    mode: 0550
+    state: directory
+
+- name: Create php app directory
+  file:
+    path: "{{ php_app_dir }}"
+    owner: "{{ user_name }}"
+    group: docker
+    mode: 0750
+    state: directory
