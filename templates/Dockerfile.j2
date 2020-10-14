@@ -6,7 +6,7 @@ RUN apt-get update
 
 # --- Copy nginx file
 RUN mkdir -p /etc/nginx/sites-enabled/
-COPY ./etc/nginx/sites-enabled/{{ domain }}.conf /etc/nginx/sites-enabled/{{ domain }}.conf
+COPY ./etc/nginx/sites-enabled/php.webdev.conf /etc/nginx/sites-enabled/{{ domain }}.conf
 
 # --- Install composer
 RUN curl -sS https://getcomposer.org/installer | php
@@ -14,7 +14,7 @@ RUN mv composer.phar /usr/local/bin/composer
 
 # --- Install and configure supervisord
 RUN apt-get -y install supervisor
-COPY ./etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ../files/etc/supervisor /etc/supervisor/conf.d/supervisord.conf
 
 # --- Setup user
 RUN groupadd --gid {{ group_gid }} {{ user_group }}
